@@ -90,7 +90,27 @@ For larger or more time-intensive changes, you're welcome to outline your ideas 
 
 <!-- Write-up/conclusion section -->
 
-_When all the behaviour is implemented, feel free to add some observations or conclusions you like to share in the section_
+So for this task I was thinking of it in terms of an actual hotel searching site so performance, scalability and testing were pretty high on my list going in.
+
+I looked over the existing code and saw that everything was all in the app file so it was quite bloated. So I planned to separate concerns and split things into reusable components for displaying data, and then make custom hooks for all of the logic. Reasoning being that it should make the code more maintainable, testable and scalable etc. If later on you wanted to add or update then you wouldn’t have to dig through everything to do it.
+
+I started with the backend index file. There was one route for hotels which fetched everything and then it was filtered in memory on the frontend. I thought it would make more sense to do as much on the server side as possible for performance, so I created a more flexible search endpoint for hotels cities and countries, using $or so that you can view all hotels by hotel name country or city and $regex for partial searching. This would solve the task (type in ‘uni’ and get UK as a country, and hotels within the UK etc).
+
+Later on I decided to also have id based routes for searching each dataset by its id, so you can navigate to each hotel, city or country on the frontend and then you would be able to display all the data for hotels for instance. I then also expanded on this by adding routes so you can fetch hotels by city or country name and display all the hotels related to a city or country when clicking it.
+
+I then moved on to the frontend. I created three hooks, each handling a separate piece of logic. useSearch handles server-side data fetching etc. useSearchQuery handles more client-side (debouncing). useSelectedItem is for fetching the hotel city or country when navigating to its page and retrieving related data.
+
+I could have had all of these as one larger hook, but again I was thinking about reusability (useSearchQuery could be used for other search-based features down the line potentially). It also made it much easier to maintain, read and test by separating them.
+
+Once I did this it meant I could have reusable UI components with all the logic separated. Instead of one big component I split it into smaller modular components for handling user input search results and selected items etc, making everything more scalable and maintainable..
+
+I also made sure that clicking on an item in the list navigates to its own page, with hotel showing all its data, and city/country displaying all related hotels with clickable links to navigate to those as well (which might be a bit extra for this task, but I thought it was an interesting feature, and seemed the next logical step).
+
+The app file uses lazy loading and suspense to only load necessary components when needed instead of loading everything upfront, which should improve initial load time.
+
+Because everything was split into reusable hooks and components it was much easier to write unit tests for each individual part. I used vitest to test every hook and component (e.g making sure the search bar updates correctly and handles debouncing etc.)
+
+So overall I focused on performance scalability and testability. I tried to ensure clean and reusable hooks and components and make navigating between related items as seamless as possible. I also tried to retain as much of the original styling as possible, but expanded on it in a way that was interesting, but not too out there (the gradient headers may have been a bit too much…). 
 
 ### Database structure
 
